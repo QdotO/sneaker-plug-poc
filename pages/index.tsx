@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Layout from '../components/Layout'
 import { queryDatabase } from '../lib/db'
 import Sneaker from '../interfaces/Sneaker'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 type Props = {
     sneakers: Sneaker[]

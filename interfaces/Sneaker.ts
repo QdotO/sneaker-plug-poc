@@ -8,7 +8,7 @@ type Sneaker = {
     id: string
     date: string
     category?: string
-    rate: string
+    rate: number
     brand: string
     name: string
     image: SneakerImage
