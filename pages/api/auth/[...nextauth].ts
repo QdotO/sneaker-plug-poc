@@ -32,7 +32,7 @@ const authOptions: NextAuthOptions = {
                         }
                     }
                 }
-                return null
+                throw new Error('Invalid Email and/or Password')
             },
         }),
     ],
