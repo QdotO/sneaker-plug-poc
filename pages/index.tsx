@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next'
 import { useState } from 'react'
-import Layout from '../components/Layout'
+import Layout from '../modules/common/components/Layout'
 import { queryDatabase } from '../lib/db'
 import Sneaker from '../interfaces/Sneaker'
 import { useRouter } from 'next/router'
