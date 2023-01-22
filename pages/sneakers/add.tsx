@@ -10,6 +10,7 @@ const AddSneakerPage = () => {
   const [brand, setBrand] = useState<string>(null)
   const [name, setName] = useState<string>(null)
   const [image, setImage] = useState<any>(null)
+  const [color, setColor] = useState<any>(null)
 
   const handleValueChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -36,6 +37,9 @@ const AddSneakerPage = () => {
         let file = event.target.files[0]
         setImage(file.name)
         break
+      case 'color':
+        setColor(value)
+        break
     }
   }
 
@@ -47,6 +51,7 @@ const AddSneakerPage = () => {
     setBrand(value)
     setName(value)
     setImage(value)
+    setColor(value)
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -63,6 +68,7 @@ const AddSneakerPage = () => {
           brand,
           name,
           image,
+          color,
         },
       },
     })
@@ -105,6 +111,14 @@ const AddSneakerPage = () => {
           name='brand'
           required
           onChange={(event) => handleValueChange(event, 'brand')}
+        />
+        <br />
+        <label htmlFor='color'>Color:</label>
+        <input
+          type='text'
+          name='color'
+          required
+          onChange={(event) => handleValueChange(event, 'color')}
         />
         <hr />
         <label htmlFor='sneaker'>Sneaker Name:</label>

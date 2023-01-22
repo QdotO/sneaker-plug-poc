@@ -12,15 +12,18 @@
     "aws-sdk": "^2.1290.0",
     "axios": "^1.2.2",
     "bcrypt": "^5.1.0",
+    "formik": "^2.2.9",
     "fs": "^0.0.1-security",
     "net": "^1.0.2",
     "next": "latest",
     "next-auth": "^4.18.8",
+    "nodemailer": "^6.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serverless-mysql": "^1.5.4",
     "styled-components": "^5.3.6",
-    "tls": "^0.0.1"
+    "tls": "^0.0.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
