@@ -87,8 +87,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
       'SELECT * FROM sneakers.users'
     )) as any[]
     const users = results.map((user) => ({ ...user }))
-    const activeUsers = users.filter((user) => user.deletedAt === null && user.deleted === null)
-    const deletedUsers = users.filter((user) => user.deletedAt !== null && user.deleted !== null)
+    const activeUsers = users.filter((user) => user.deletedAt === null)
+    const deletedUsers = users.filter((user) => user.deletedAt !== null)
     console.log({ activeUsers, deletedUsers })
 
     return { props: { users: activeUsers, deletedUsers } }
