@@ -1,16 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { queryDatabase } from '../../../../lib/db'
+import Sneaker from '../../../../interfaces/Sneaker'
 import axios from 'axios'
-import Layout from '../../modules/common/components/Layout'
-import FileUpload from '../../modules/common/components/FileUpload'
+import { GetServerSideProps } from 'next'
+import Layout from '../../../../modules/common/components/Layout'
+import FileUpload from '../../../../modules/common/components/FileUpload'
 
-const AddSneakerPage = () => {
-  const [date, setDate] = useState<string>('')
-  const [category, setCategory] = useState<string>('')
-  const [rate, setRate] = useState<string>(null)
-  const [brand, setBrand] = useState<string>(null)
-  const [name, setName] = useState<string>(null)
-  const [image, setImage] = useState<any>(null)
-  const [color, setColor] = useState<any>(null)
+const EditSneakerPage = ({ sneaker }: { sneaker: Sneaker }) => {
+  const [date, setDate] = useState<string>(sneaker.date)
+  const [category, setCategory] = useState<string>(sneaker.category)
+  const [rate, setRate] = useState<string>(`${sneaker.rate}`)
+  const [brand, setBrand] = useState<string>(sneaker.brand)
+  const [name, setName] = useState<string>(sneaker.name)
+  const [image, setImage] = useState<any>(sneaker.image)
+  const router = useRouter()
 
   const handleValueChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -37,48 +41,31 @@ const AddSneakerPage = () => {
         let file = event.target.files[0]
         setImage(file.name)
         break
-      case 'color':
-        setColor(value)
-        break
     }
   }
 
-  const clearValues = () => {
-    let value = ''
-    setDate(value)
-    setCategory(value)
-    setRate(value)
-    setBrand(value)
-    setName(value)
-    setImage(value)
-    setColor(value)
-  }
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    const shoeId = crypto.randomUUID()
     event.preventDefault()
-
-    const result = axios.post('/api/sneakers/add', {
+    const result = axios.post(`/api/sneakers/edit/${sneaker.id}`, {
       body: {
         sneaker: {
-          shoeId,
+          ...sneaker,
           date,
           category,
           rate,
           brand,
           name,
-          image,
-          color,
-        },
-      },
+          image
+        }
+      }
     })
-    console.log({ SubmitSneakerResult: result })
-    clearValues()
+    console.log({ EditSneakerResult: result })
+    router.push(`/sneakers/view/${sneaker.id}`)
   }
 
   return (
     <Layout>
-      <h2>Add Sneaker to inventory:</h2>
+      <h2>Edit Sneaker in inventory:</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor='date'>Date:</label>
         <input
@@ -86,7 +73,6 @@ const AddSneakerPage = () => {
           name='date'
           id='date'
           value={date}
-          required
           onChange={(event) => handleValueChange(event, 'date')}
         />
         <br />
@@ -94,6 +80,7 @@ const AddSneakerPage = () => {
         <input
           type='text'
           name='category'
+          value={category}
           onChange={(event) => handleValueChange(event, 'category')}
         />
         <br />
@@ -101,7 +88,7 @@ const AddSneakerPage = () => {
         <input
           type='number'
           name='rate'
-          required
+          value={rate}
           onChange={(event) => handleValueChange(event, 'rate')}
         />
         <br />
@@ -109,16 +96,8 @@ const AddSneakerPage = () => {
         <input
           type='text'
           name='brand'
-          required
+          value={brand}
           onChange={(event) => handleValueChange(event, 'brand')}
-        />
-        <br />
-        <label htmlFor='color'>Color:</label>
-        <input
-          type='text'
-          name='color'
-          required
-          onChange={(event) => handleValueChange(event, 'color')}
         />
         <hr />
         <label htmlFor='sneaker'>Sneaker Name:</label>
@@ -126,20 +105,39 @@ const AddSneakerPage = () => {
           type='text'
           name='name'
           required
+          value={name}
           onChange={(event) => handleValueChange(event, 'name')}
         />
         <br />
         <hr />
         <label htmlFor='sneaker'>Image:</label>
         <FileUpload
+          image={image ? `/api/sneakers/images/${image}` : null}
           onFileUploaded={(event) => handleValueChange(event, 'image')}
         />
         <br />
-
         <button type='submit'>Submit</button>
       </form>
     </Layout>
   )
 }
 
-export default AddSneakerPage
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const id = context.query.id as string
+  const results = (await queryDatabase(
+    `SELECT * FROM sneakers.sneakers WHERE id='${id}'`
+  )) as any[]
+  const sneaker: Sneaker = { ...results[0] }
+  const formattedDate = new Date(Number.parseInt(sneaker.date))
+    .toISOString()
+    .split('T')[0]
+  sneaker.date = formattedDate
+
+  return {
+    props: {
+      sneaker
+    }
+  }
+}
+
+export default EditSneakerPage
