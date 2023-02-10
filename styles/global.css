@@ -1,7 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
+/* :root {
   --primary-color: orange;
   --secondary-color: yellow;
   --dark-color: rgb(26, 26, 26);
-  
-}
+} */
