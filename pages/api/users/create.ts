@@ -14,7 +14,7 @@ const Add = async (_req: NextApiRequest, res: NextApiResponse) => {
       streetAddress2,
       city,
       state,
-      zipCode,
+      zipCode
     } = _req.body.account
     const dateCreated = Date.now()
     const query = `INSERT INTO sneakers.users (id, username, firstName, lastName, email, phone, streetAddress, streetAddress2, city, state, zipCode, dateCreated, emailVerified, isAdmin ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
@@ -33,10 +33,10 @@ const Add = async (_req: NextApiRequest, res: NextApiResponse) => {
       zipCode,
       dateCreated,
       false,
-      false,
+      false
     ])
     console.log({ CreateAccountResult: result })
-    sendVerifyEmail({email, firstName, lastName})
+    // sendVerifyEmail({email, firstName, lastName})
   } catch (error) {
     console.log({ CreateAccountError: error })
     res.status(500).send('Create Account Error')
